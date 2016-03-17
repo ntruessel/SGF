@@ -2,6 +2,9 @@
 #include <cinttypes>
 #include <vector>
 
+#include <unistd.h>
+#include <sys/socket.h>
+
 using namespace std;
 
 struct Graph {
@@ -17,7 +20,7 @@ struct Graph {
 		turn(turn) {}
 
 	bool valid(uint16_t u, uint16_t v) {
-		if (u == v) {
+		if ((u >= n) || (v >= n) || (u == v)) {
 			return false;
 		}
 
@@ -61,13 +64,53 @@ struct Graph {
 };
 
 int main(void) {
-	ios::sync_with_stdio(false);
+	int minifd[2];
+	int maxifd[2];
+	socketpair(AF_UNIX, SOCK_STREAM, 0, maxifd);
+	socketpair(AF_UNIX, SOCK_STREAM, 0, minifd);
+
+	if (0 == fork()) {
+		close(minifd[0]);
+		dup2(minifd[1], STDIN_FILENO);
+		dup2(minifd[1], STDOUT_FILENO);
+		close(minifd[1]);
+		execl("mini", "mini", (char *) NULL);
+	}
+	close(minifd[1]);
+	FILE *mini = fdopen(minifd[0], "r+");
+
+	if (0 == fork()) {
+		close(maxifd[0]);
+		dup2(maxifd[1], STDIN_FILENO);
+		dup2(maxifd[1], STDOUT_FILENO);
+		close(maxifd[1]);
+		execl("maxi", "maxi", (char *) NULL);
+	}
+	close(maxifd[1]);
+	FILE *maxi = fdopen(maxifd[0], "r+");
 
 	Graph g(3,0);
-	cout << g.n << " " << static_cast<uint16_t>(g.turn) << endl;
+	fprintf(maxi, "%" PRIu16 " %" PRIu8 "\n", g.n, g.turn);
+	fprintf(mini, "%" PRIu16 " %" PRIu8 "\n", g.n, g.turn);
+
+	FILE *in;
+	FILE *out;
+
 	while(g.available_edges > 0) {
+		if (g.turn == 0) {
+			in = mini;
+			out = maxi;
+		} else {
+			in = maxi;
+			out = mini;
+		}
+
 		uint16_t u, v;
-		cin >> u >> v;
+		if (fscanf(in, "%" SCNu16 " %" SCNu16, &u, &v) < 2) {
+			cerr << "Incomplete input" << endl;
+			exit(1);
+		}
+		fprintf(out, "%" PRIu16 " %" PRIu8 "\n", u, v);
 		g.set(u,v);
 	}
 	return 0;
