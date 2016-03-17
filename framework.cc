@@ -95,7 +95,7 @@ int main(void) {
 	close(maxifd[1]);
 	FILE *maxi = fdopen(maxifd[0], "r+");
 
-	unique_ptr<Graph> g(new Triangle_Free_Graph(3));
+	Graph *g(new Triangle_Free_Graph(3));
 	int turn = 0;
 
 	fprintf(maxi, "%" PRIu16 " %" PRIu8 "\n", g->n(), turn);
@@ -123,5 +123,8 @@ int main(void) {
 		g->set(u, v, (turn == 0 ? Entry::mini : Entry::maxi));
 		turn = 1 - turn;
 	}
+	fclose(mini);
+	fclose(maxi);
+	delete g;
 	return 0;
 }

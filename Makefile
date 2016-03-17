@@ -1,7 +1,9 @@
 CXX ?= g++
 CXXFLAGS = -std=c++11 -g -Wall -Wextra
 
-SRC = $(wildcard *.cc)
+SRC = graph.cc \
+	  triangle_free_graph.cc \
+	  framework.cc
 
 all: framework
 

@@ -12,6 +12,7 @@ uint16_t Graph::n(void) {
 void Graph::set(uint16_t u, uint16_t v, Entry e) {
 	if (u < n() && v < n() && (e == Entry::empty || is_valid(u,v,e))) {
 		adjacency_matrix[u][v] = e;
+		adjacency_matrix[v][u] = e;
 	}
 }
 
@@ -21,3 +22,5 @@ Entry Graph::get(uint16_t u, uint16_t v) {
 	}
 	return adjacency_matrix[0][0];
 }
+
+Graph::~Graph(void) {}

@@ -2,7 +2,7 @@
 
 Triangle_Free_Graph::Triangle_Free_Graph(uint16_t n)
 	: Graph(n)
-	, available_edges(0) {}
+	, available_edges(n * (n - 1) / 2) {}
 
 
 void Triangle_Free_Graph::set(uint16_t u, uint16_t v, Entry e) {

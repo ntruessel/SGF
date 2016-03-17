@@ -14,6 +14,7 @@ class Graph {
 		std::vector<std::vector<Entry>> adjacency_matrix;
 		Graph(uint16_t n);
 	public:
+		virtual ~Graph(void);
 		uint16_t n(void);
 		virtual bool is_valid(uint16_t u, uint16_t v, Entry e) = 0;
 		virtual bool saturated(void) = 0;
