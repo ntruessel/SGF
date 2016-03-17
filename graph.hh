@@ -10,11 +10,13 @@ enum Entry {
 };
 
 class Graph {
-	private:
+	protected:
 		std::vector<std::vector<Entry>> adjacency_matrix;
-	public:
 		Graph(uint16_t n);
+	public:
 		uint16_t n(void);
-		void set(uint16_t u, uint16_t v, Entry e);
+		virtual bool is_valid(uint16_t u, uint16_t v, Entry e) = 0;
+		virtual bool saturated(void) = 0;
+		virtual void set(uint16_t u, uint16_t v, Entry e);
 		Entry get(uint16_t u, uint16_t v);
 };

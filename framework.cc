@@ -1,12 +1,17 @@
 #include <iostream>
 #include <cinttypes>
 #include <vector>
+#include <memory>
 
 #include <unistd.h>
 #include <sys/socket.h>
 
+#include "graph.hh"
+#include "triangle_free_graph.hh"
+
 using namespace std;
 
+/*
 struct Graph {
 	uint16_t n;
 	vector<vector<uint8_t>> graph;
@@ -62,6 +67,7 @@ struct Graph {
 		turn = 1 - turn;
 	}
 };
+*/
 
 int main(void) {
 	int minifd[2];
@@ -89,15 +95,18 @@ int main(void) {
 	close(maxifd[1]);
 	FILE *maxi = fdopen(maxifd[0], "r+");
 
-	Graph g(3,0);
-	fprintf(maxi, "%" PRIu16 " %" PRIu8 "\n", g.n, g.turn);
-	fprintf(mini, "%" PRIu16 " %" PRIu8 "\n", g.n, g.turn);
+	unique_ptr<Graph> g(new Triangle_Free_Graph(3));
+	int turn = 0;
+
+	fprintf(maxi, "%" PRIu16 " %" PRIu8 "\n", g->n(), turn);
+	fprintf(mini, "%" PRIu16 " %" PRIu8 "\n", g->n(), turn);
 
 	FILE *in;
 	FILE *out;
 
-	while(g.available_edges > 0) {
-		if (g.turn == 0) {
+
+	while(!g->saturated()) {
+		if (turn == 0) {
 			in = mini;
 			out = maxi;
 		} else {
@@ -111,7 +120,8 @@ int main(void) {
 			exit(1);
 		}
 		fprintf(out, "%" PRIu16 " %" PRIu8 "\n", u, v);
-		g.set(u,v);
+		g->set(u, v, (turn == 0 ? Entry::mini : Entry::maxi));
+		turn = 1 - turn;
 	}
 	return 0;
 }

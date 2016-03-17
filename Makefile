@@ -1,7 +1,10 @@
 CXX ?= g++
 CXXFLAGS = -std=c++11 -g -Wall -Wextra
 
+SRC = $(wildcard *.cc)
+
 all: framework
 
-%: %.cc
-	$(CXX) $(CXXFLAGS) -o $@ $<
+framework: $(SRC)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
