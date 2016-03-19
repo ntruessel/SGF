@@ -10,8 +10,8 @@ void Triangle_Free_Graph::set(uint16_t u, uint16_t v, Entry e) {
 	available_edges--;
 	for (uint16_t i = 0; i < n(); i++) {
 		if ((i != u && i != v) &&
-				(adjacency_matrix[u][i] != 0 ||
-				 adjacency_matrix[v][i] != 0)) {
+				(adjacency_matrix[u][i] != Entry::empty ||
+				 adjacency_matrix[v][i] != Entry::empty)) {
 			available_edges--; // (u i) or (v i) would complete a triangle
 		}
 	}

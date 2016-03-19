@@ -1,9 +1,10 @@
 CXX ?= g++
 CXXFLAGS = -std=c++11 -g -Wall -Wextra
 
-SRC = graph.cc \
+SRC = framework.cc \
+	  graph.cc \
 	  triangle_free_graph.cc \
-	  framework.cc
+	  external_strategy.cc
 
 all: framework
 

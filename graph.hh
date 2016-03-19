@@ -3,7 +3,7 @@
 #include <vector>
 #include <cstdint>
 
-enum Entry {
+enum class Entry {
 	empty = 0,
 	mini = 1,
 	maxi = 2
