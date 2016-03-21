@@ -10,8 +10,9 @@ enum class Player {
 
 class External_Strategy : public Strategy {
 	private:
-		int fd[2];
-		FILE *stream;
+		int fdi[2];
+		int fdo[2];
+		FILE *streami, *streamo;
 	public:
 		External_Strategy(char const *program, uint16_t n, Player first_player);
 		virtual void announce(uint16_t u, uint16_t v);
