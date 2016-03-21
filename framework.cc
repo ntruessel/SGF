@@ -13,30 +13,34 @@
 
 using namespace std;
 
-int main(void) {
-	Graph *g(new Triangle_Free_Graph(3));
-	Player p = Player::mini;
+static uint32_t play(uint16_t n, Player first_player) {
+	Graph *g(new Triangle_Free_Graph(n));
+	Strategy *mini(new External_Strategy("mini", n, first_player));
+	Strategy *maxi(new External_Strategy("maxi", n, first_player));
 
-	Strategy *mini(new External_Strategy("mini", g->n(), p));
-	Strategy *maxi(new External_Strategy("maxi", g->n(), p));
+	uint32_t result = 1;
+	Strategy *current_player = first_player == Player::mini ? mini : maxi;
+	pair<uint16_t, uint16_t> last_move = current_player->next_move();
+	g->set(last_move.first, last_move.second,
+			current_player == mini ? Entry::mini : Entry::maxi);
 
-	Strategy *in, *out;
 	while(!g->saturated()) {
-		if (p == Player::mini) {
-			in = mini;
-			out = maxi;
-		} else {
-			in = maxi;
-			out = mini;
-		}
-		pair<uint16_t, uint16_t> move = in->next_move();
-		out->announce(move.first, move.second);
-		g->set(move.first, move.second,
-				(p == Player::mini ? Entry::mini : Entry::maxi));
-		p = (p == Player::mini ? Player::maxi : Player::mini);
+		current_player = current_player == mini ? maxi : mini;
+		current_player->announce(last_move.first, last_move.second);
+		last_move = current_player->next_move();
+		g->set(last_move.first, last_move.second,
+				current_player == mini ? Entry::mini : Entry::maxi);
+		result++;
 	}
+
 	delete maxi;
 	delete mini;
 	delete g;
+
+	return result;
+}
+
+int main(void) {
+	cout << play(3, Player::mini) << endl;
 	return 0;
 }
