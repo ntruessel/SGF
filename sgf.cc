@@ -20,18 +20,33 @@ static uint32_t play(uint16_t n, Player first_player) {
 
 	uint32_t result = 1;
 	Strategy *current_player = first_player == Player::mini ? mini : maxi;
-	pair<uint16_t, uint16_t> last_move = current_player->next_move();
-	g->set(last_move.first, last_move.second,
-			current_player == mini ? Entry::mini : Entry::maxi);
+	uint16_t u, v;
+	tie(u, v) = current_player->next_move();
+	if (!g->is_valid(u, v,
+				current_player == mini ? Entry::mini : Entry::maxi)) {
+		cerr << "Invalid move from ";
+		cerr << (current_player == mini ? "mini" : "maxi");
+		cerr << endl;
+		return 1;
+	}
+	g->set(u, v, current_player == mini ? Entry::mini : Entry::maxi);
 
 	while(!g->saturated()) {
 		current_player = current_player == mini ? maxi : mini;
-		current_player->announce(last_move.first, last_move.second);
-		last_move = current_player->next_move();
-		g->set(last_move.first, last_move.second,
-				current_player == mini ? Entry::mini : Entry::maxi);
+		current_player->announce(u, v);
+		tie(u,v) = current_player->next_move();
+		if (!g->is_valid(u, v,
+					current_player == mini ? Entry::mini : Entry::maxi)) {
+			cerr << "Invalid move from ";
+			cerr << (current_player == mini ? "mini" : "maxi");
+			cerr << endl;
+			return 1;
+		}
+		g->set(u, v, current_player == mini ? Entry::mini : Entry::maxi);
 		result++;
 	}
+	current_player = current_player == mini ? maxi : mini;
+	current_player->announce(u, v);
 
 	delete maxi;
 	delete mini;

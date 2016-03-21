@@ -10,10 +10,7 @@ uint16_t Graph::n(void) {
 }
 
 void Graph::set(uint16_t u, uint16_t v, Entry e) {
-	if (u < n() && v < n() &&
-			(e == Entry::mini || e == Entry::maxi) &&
-			adjacency_matrix[u][v] == Entry::empty &&
-			is_valid(u,v,e)) {
+	if (is_valid(u,v,e)) {
 		adjacency_matrix[u][v] = e;
 		adjacency_matrix[v][u] = e;
 	}
