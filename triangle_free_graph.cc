@@ -10,13 +10,17 @@ void Triangle_Free_Graph::set(uint16_t u, uint16_t v, Entry e) {
 	available_edges--;
 	for (uint16_t i = 0; i < n(); i++) {
 		if (i != u && i != v) {
-			if (adjacency_matrix[u][i] == Entry::mini ||
-					adjacency_matrix[u][i] == Entry::maxi) {
+			if ((adjacency_matrix[u][i] == Entry::mini ||
+					adjacency_matrix[u][i] == Entry::maxi) &&
+					adjacency_matrix[v][i] == Entry::empty) {
 				adjacency_matrix[v][i] = Entry::blocked;
+				adjacency_matrix[i][v] = Entry::blocked;
 				available_edges--; // (u i) or (v i) would complete a triangle
-			} else if (adjacency_matrix[v][i] == Entry::mini ||
-					adjacency_matrix[v][i] == Entry::maxi) {
+			} else if ((adjacency_matrix[v][i] == Entry::mini ||
+					adjacency_matrix[v][i] == Entry::maxi) &&
+					adjacency_matrix[u][i] == Entry::empty) {
 				adjacency_matrix[u][i] = Entry::blocked;
+				adjacency_matrix[i][u] = Entry::blocked;
 				available_edges--; // (u i) or (v i) would complete a triangle
 			}
 		}
