@@ -9,7 +9,7 @@ void Triangle_Free_Graph::set(uint16_t u, uint16_t v, Entry e) {
 	Graph::set(u,v,e);
 	available_edges--;
 	for (uint16_t i = 0; i < n(); i++) {
-		if (u == i | v == i) {
+		if (u == i || v == i) {
 			continue;
 		}
 		if ((adjacency_matrix[u][i] == Entry::mini ||		// - other edge is
