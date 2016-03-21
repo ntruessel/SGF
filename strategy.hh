@@ -3,6 +3,11 @@
 #include <utility>
 #include <inttypes.h>
 
+enum class Player {
+	maxi,
+	mini,
+};
+
 class Strategy {
 	public:
 		virtual void announce(uint16_t u, uint16_t v) = 0;

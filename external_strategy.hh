@@ -3,11 +3,6 @@
 #include <cstdio>
 #include "strategy.hh"
 
-enum class Player {
-	maxi,
-	mini,
-};
-
 class External_Strategy : public Strategy {
 	private:
 		int fdi[2];
