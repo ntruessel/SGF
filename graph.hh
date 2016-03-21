@@ -4,9 +4,10 @@
 #include <cstdint>
 
 enum class Entry {
+	blocked = -1,
 	empty = 0,
 	mini = 1,
-	maxi = 2
+	maxi = 2,
 };
 
 class Graph {
