@@ -4,7 +4,7 @@
 
 class Triangle_Free_Graph : public Graph {
 	private:
-		uint16_t available_edges;
+		uint32_t available_edges;
 	public:
 		Triangle_Free_Graph(uint16_t n);
 		virtual void set(uint16_t u, uint16_t v, Entry e);
