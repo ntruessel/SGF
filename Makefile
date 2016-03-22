@@ -1,5 +1,5 @@
-CXX ?= g++
-CXXFLAGS = -std=c++11 -g -Wall -Wextra
+CXX = clang++
+CXXFLAGS = -std=c++11 -Wall -Wextra -O3
 
 SRC = sgf.cc \
 	  graph.cc \

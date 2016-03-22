@@ -45,8 +45,8 @@ int main(int argc, char *argv[]) {
 	random_shuffle(edges.begin(), edges.end(), [](int bound){ return rand() % bound; });
 
 	uint16_t u, v;
-	bool we_move = (p == 0 && strcmp(argv[0], "mini") == 0) ||
-		(p == 1 && strcmp(argv[0], "maxi") == 0);
+	bool we_move = (p == 0 && strcmp(argv[1], "mini") == 0) ||
+		(p == 1 && strcmp(argv[1], "maxi") == 0);
 
 	while(!edges.empty()) {
 		if (we_move) {

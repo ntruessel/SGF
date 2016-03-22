@@ -11,7 +11,7 @@
 #define READ_FD 0
 
 External_Strategy::External_Strategy(char const *program,
-		uint16_t n, Player first_player) {
+		Player us, uint16_t n, Player first_player) {
 	pipe(fdi);
 	pipe(fdo);
 
@@ -23,7 +23,8 @@ External_Strategy::External_Strategy(char const *program,
 		dup2(fdo[READ_FD], STDIN_FILENO);
 		close(fdi[WRITE_FD]);
 		close(fdo[READ_FD]);
-		execl(program, program, (char *) NULL);
+		execl(program, program, us == Player::mini ? "mini" : "maxi",
+				(char *) NULL);
 		abort();
 	}
 
